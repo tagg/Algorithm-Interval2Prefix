@@ -51,8 +51,9 @@ Algorithm::Interval2Prefix - Generate prefixes from intervals
 =head1 DESCRIPTION
 
 Taking an interval as input, this module will construct the smallest
-set of prefixes, such that any number in the interval will match one
-of the prefixes.
+set of prefixes, such that all numbers in the interval will match
+exactly one of the prefixes, and no prefix will match a number not in
+the interval.
 
 E.g. all numbers in the interval 39967000 to 39980999 would be matched
 by the following set of prefixes:
