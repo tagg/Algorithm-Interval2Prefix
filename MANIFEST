@@ -1,8 +1,9 @@
+Build.PL
 Changes
 Interval2Prefix.pm
 MANIFEST
+META.yml
 Makefile.PL
-META.yml                                 Module meta-data (added by MakeMaker)
 README
 t/basic.t
 t/pod.t

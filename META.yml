@@ -1,11 +1,15 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Algorithm-Interval2Prefix
-version:      0.1
-version_from: Interval2Prefix.pm
-installdirs:  site
-requires:
-    Test::More:                    0
-
+--- #YAML:1.0
+name: Algorithm-Interval2Prefix
+version: 0.01
+license: perl
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+requires:
+  Test::More: 0
+recommends: {}
+build_requires: {}
+conflicts: {}
+provides:
+  Algorithm::Interval2Prefix:
+    file: Interval2Prefix.pm
+    version: 0.01
+generated_by: Module::Build version 0.21

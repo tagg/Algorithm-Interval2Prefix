@@ -8,7 +8,7 @@ require Exporter;
 @ISA = qw(Exporter);
 @EXPORT = qw(&interval2prefix);
 
-$VERSION = '0.1';
+$VERSION = '0.01';
 
 my %Step;  # cache
 
@@ -46,7 +46,7 @@ Algorithm::Interval2Prefix - Generate prefixes from intervals
   use Algorithm::Interval2Prefix;
   my @prefixes = interval2prefix('33400','33599');
 
-  print join(',', @prefixes); # prints "334,335"
+  print join(',', @prefixes);  # prints "334,335"
 
 =head1 DESCRIPTION
 
@@ -87,6 +87,11 @@ C<$base> is optional, and defaults to 10.
 =head1 EXPORT
 
 C<&interval2prefix> is exported by default.
+
+=head1 BUGS
+
+Please report any bugs via CPAN RT (http://rt.cpan.org/) or mail
+the author.
 
 =head1 AUTHOR
 
