@@ -50,16 +50,25 @@ Algorithm::Interval2Prefix - Generate prefixes from intervals
 
 =head1 DESCRIPTION
 
-Taking an interval as input, this module will construct the set of
-prefixes, such that any number in the interval will match one of the
-prefixes.
+Taking an interval as input, this module will construct the smallest
+set of prefixes, such that any number in the interval will match one
+of the prefixes.
 
-E.g. the interval [33400, 33599] yields prefixes 334 and 335, since
-each number in the range 33400..33599 will match one of the prefixes
-'334.*' or '335.*'.
+E.g. all numbers in the interval 39967000 to 39980999 would be matched
+by the following set of prefixes:
 
-This is particularily useful when working with telephony switching
-equipment, which usually works on number prefixes rather than ranges.
+  39967
+  39968
+  39969
+  3997
+  39980
+
+This type of conversion is particularly useful when working with
+telephony switching equipment, which usually determines call routing
+based on number prefixes rather than ranges.
+
+The algorithm is much dependent on the number base, which defaults to
+10. Other number bases can be specified explicitly.
 
 =head1 FUNCTIONS
 
@@ -69,7 +78,7 @@ equipment, which usually works on number prefixes rather than ranges.
    or
   my @q = interval2prefix($lo, $hi, $base);
 
-yields an array of prefixes, covering the interval C<$lo> to C<$hi>,
+Yields an array of prefixes, covering the interval C<$lo> to C<$hi>,
 using number base C<$base>.
 
 C<$base> is optional, and defaults to 10.
