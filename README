@@ -1,0 +1,54 @@
+NAME
+    Algorithm::Interval2Prefix - Generate prefixes from intervals
+
+SYNOPSIS
+      use Algorithm::Interval2Prefix;
+      my @prefixes = interval2prefix('33400','33599');
+
+      print join(',', @prefixes); # prints "334,335"
+
+DESCRIPTION
+    Taking an interval as input, this module will construct the smallest set
+    of prefixes, such that all numbers in the interval will match exactly
+    one of the prefixes, and no prefix will match a number not in the
+    interval.
+
+    E.g. all numbers in the interval 39967000 to 39980999 would be matched
+    by the following set of prefixes:
+
+      39967
+      39968
+      39969
+      3997
+      39980
+
+    This type of conversion is particularly useful when working with
+    telephony switching equipment, which usually determines call routing
+    based on number prefixes rather than ranges.
+
+    The algorithm is much dependent on the number base, which defaults to
+    10. Other number bases can be specified explicitly.
+
+FUNCTIONS
+  "interval2prefix()"
+      my @p = interval2prefix($lo, $hi);
+       or
+      my @q = interval2prefix($lo, $hi, $base);
+
+    Yields an array of prefixes, covering the interval $lo to $hi, using
+    number base $base.
+
+    $base is optional, and defaults to 10.
+
+EXPORT
+    &interval2prefix is exported by default.
+
+AUTHOR
+    Lars Thegler <lars@thegler.dk>
+
+COPYRIGHT
+    Copyright (c) 2003 Lars Thegler. All rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
