@@ -6,9 +6,9 @@ use vars qw($VERSION @ISA @EXPORT);
 require Exporter;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&interval2prefix);
+@EXPORT = qw(interval2prefix interval2regex);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 my %Step;  # cache
 
@@ -19,20 +19,41 @@ sub _step {
   return $Step{$base}[$i] = $Step{$base}[$i-1] * $base;
 }
 
-sub interval2prefix {
-  my($lo, $hi, $base) = @_;
-  $base ||= 10;  # default number base
+sub _i2a {
+  my($lo, $hi, $base, $render) = @_;
   my @res;
   while ($lo <= $hi) {
     my $i = 0;
     while (($lo % _step($i+1, $base) == 0) and
-	  (($lo + _step($i+1, $base) - 1 <= $hi))) {
+          (($lo + _step($i+1, $base) - 1 <= $hi))) {
       $i++;
     }
-    push @res, $lo / _step($i, $base);
+    push @res, $render->($lo, $i, $base);
     $lo += _step($i, $base);
   }
   return @res;
+}
+
+sub interval2prefix {
+  my($lo, $hi, $base) = @_;
+  return _i2a($lo, $hi, $base || 10,
+              sub {
+                my($n, $i, $base)= @_;
+                return $n / _step($i, $base);
+              });
+}
+
+sub interval2regex {
+  my($lo, $hi) = @_;
+  my @res = _i2a($lo, $hi, 10,
+                 sub {
+                   my($n, $i, $base)= @_;
+                   my $p = $n / _step($i, $base);
+                   my $s = length($n) - length($p);
+                   return $p . ($s ? '\d' . ($s > 1 ? "{$s}" : '') : '');
+                 });
+  return unless @res;
+  return '^(?:' . join('|', @res) . ')$';
 }
 
 1;
@@ -44,9 +65,12 @@ Algorithm::Interval2Prefix - Generate prefixes from intervals
 =head1 SYNOPSIS
 
   use Algorithm::Interval2Prefix;
-  my @prefixes = interval2prefix('33400','33599');
 
+  my @prefixes = interval2prefix('33400','33599');
   print join(',', @prefixes);  # prints "334,335"
+
+  my $regex = interval2regex('33400','33599');
+  if ($n =~ /$regex/) { ... }
 
 =head1 DESCRIPTION
 
@@ -68,29 +92,58 @@ This type of conversion is particularly useful when working with
 telephony switching equipment, which usually determines call routing
 based on number prefixes rather than ranges.
 
+Note that the numbers in the interval must be of the same length
+for the result to make sense.
+
 The algorithm is much dependent on the number base, which defaults to
 10. Other number bases can be specified explicitly.
 
+An additional function is provided, that will generate a regular
+expression string matching B<only> those numbers in the interval.
+
 =head1 FUNCTIONS
 
-=head2 C<interval2prefix()>
+=over 4
 
-  my @p = interval2prefix($lo, $hi);
-   or
-  my @q = interval2prefix($lo, $hi, $base);
+=item interval2prefix LO,HI,BASE
 
-Yields an array of prefixes, covering the interval C<$lo> to C<$hi>,
-using number base C<$base>.
+=item interval2prefix LO,HI
 
-C<$base> is optional, and defaults to 10.
+Yields an array of prefixes, covering the interval LO to HI,
+using number base BASE.
+
+BASE is optional, and defaults to 10.
+
+=item interval2regex LO,HI
+
+Yields a regular expression string, which will match B<only> those
+numbers in the interval.
+
+This function assumes base 10.
+
+=back
 
 =head1 EXPORT
 
-C<&interval2prefix> is exported by default.
+Both interval2prefix() and interval2regex() are exported by default.
 
-=head1 BUGS
+=head1 BUGS/TODO
 
-Please report any bugs via CPAN RT:
+=over 4
+
+=item *
+
+With interval2prefix(), the endpoints of the interval must be the
+same length (same number of digits in the particular number base)
+for the results to make any sense.
+
+=item *
+
+interval2regex() only does base 10.
+
+=back
+
+Please report issues via CPAN RT:
 
   http://rt.cpan.org/NoAuth/Bugs.html?Dist=Algorithm-Interval2Prefix
 
