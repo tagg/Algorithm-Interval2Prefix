@@ -90,8 +90,13 @@ C<&interval2prefix> is exported by default.
 
 =head1 BUGS
 
-Please report any bugs via CPAN RT (http://rt.cpan.org/) or mail
-the author.
+Please report any bugs via CPAN RT:
+
+  http://rt.cpan.org/NoAuth/Bugs.html?Dist=Algorithm-Interval2Prefix
+
+or by sending mail to
+
+  bug-Algorithm-Interval2Prefix@rt.cpan.org
 
 =head1 AUTHOR
 
